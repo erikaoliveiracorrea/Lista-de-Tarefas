@@ -30,6 +30,20 @@ function App() {
     setNovoItem("");
   }
 
+  // Função para marcar/desmarcar tarefa
+  function alternarConcluida(id) {
+    const novasTarefas = tarefas.map(tarefa => {
+      if (tarefa.id === id) {
+        // Se for a tarefa que cliquei, inverto o valor de concluida
+        return { ...tarefa, concluida: !tarefa.concluida };
+      }
+      // Se não for ela, retorno o item sem mexer
+      return tarefa;
+    });
+
+    setTarefas(novasTarefas);
+  }
+
   return (
     <div className="container">
       <header>
@@ -58,7 +72,7 @@ function App() {
           {tarefas.map((tarefa) => (
             <li key={tarefa.id} className={`item ${tarefa.concluida ? 'concluido' : ''}`}>
               <div className="item-texto">
-                <span className="radio-icon"></span>
+                <span className="radio-icon" onClick={() => alternarConcluida(tarefa.id)}></span>
                 {tarefa.texto}
               </div>
               <div className="acoes">
