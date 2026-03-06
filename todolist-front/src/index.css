@@ -1,0 +1,10 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #6366f1;
+  --bg-gradient: linear-gradient(135deg, #667eea 0%, #a24ba2 100%);
+}
