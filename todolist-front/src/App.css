@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: sans-serif;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   background: var(--bg-gradient);
   min-height: 100vh;
   display: flex;
@@ -10,9 +10,13 @@ body {
 
 .container {
   text-align: center;
-  color: white;
+  color: #ffffff;
   width: 100%;
   max-width: 600px;
+}
+
+header p {
+  margin-top: 10px;
 }
 
 .card {
@@ -33,14 +37,18 @@ body {
 input {
   flex: 1;
   padding: 12px;
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--second);
   border-radius: 8px;
   outline: none;
 }
 
+input:focus {
+  border-color: var(--primary);
+}
+
 .btn-add {
-  background: var(--primary);
-  color: white;
+  background: var(--bg-gradient);
+  color: #ffffff;
   border: none;
   padding: 0 20px;
   border-radius: 8px;
@@ -51,10 +59,11 @@ input {
 .item {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
   align-items: center;
+  /*gap: 10px;*/
+  /*background: #f1ddef;*/
+  border: 2px solid var(--second);
   padding: 15px;
-  background: #f1ddef;
   margin-bottom: 10px;
   border-radius: 8px;
 }
@@ -70,15 +79,15 @@ input {
 .radio-icon {
   width: 20px;
   height: 20px;
-  border: 2px solid var(--primary); /* Usa a cor roxa que você definiu */
-  border-radius: 50%; /* Faz ficar redondo */
+  border: 2px solid var(--primary);
+  border-radius: 50%;
   display: inline-block;
   cursor: pointer;
   transition: all 0.2s ease;
-  background: white;
+  background: #ffffff;
   position: relative;
 }
-
+/* quando o tarefa estiver concluida o texto fica riscado*/
 .item.concluido {
   background: #ecfdf5;
   text-decoration: line-through;
@@ -111,10 +120,10 @@ input {
 }
 
 .btn-edit {
-  background: #a7f5be;
+  background: #affae1;
   color: #0ea5e9;
 }
 .btn-delete {
-  background: #f0bebe;
+  background: #ffcfcf;
   color: #ef4444;
 }
