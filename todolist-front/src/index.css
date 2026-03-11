@@ -5,6 +5,7 @@
 }
 
 :root {
-  --primary: #6366f1;
+  --primary: #7355ae;
+  --second: #e2e8f0;
   --bg-gradient: linear-gradient(135deg, #667eea 0%, #a24ba2 100%);
 }
