@@ -29,6 +29,11 @@ function App() {
     // Limpamos o campo de input após adicionar
     setNovoItem("");
   }
+  //key no botão adicionar
+  function handleSubmit(e){
+    e.preventDefault();
+    adicionarTarefa();
+  }
 
   // Função para marcar/desmarcar tarefa
   function alternarConcluida(id) {
@@ -52,18 +57,17 @@ function App() {
       </header>
 
       <div className="card">
-        <div className="input-group">
+        <form className="input-group" onSubmit={handleSubmit}>
           <input 
             type="text" 
             placeholder="Digite uma nova tarefa..." 
             value={novoItem}
             onChange={(e) => setNovoItem(e.target.value)}
           />
-          {/* 4. Ligamos a função ao clique do botão */}
-          <button className="btn-add" onClick={adicionarTarefa}>
+          <button type="submit" className="btn-add">
             Adicionar
           </button>
-        </div>
+        </form>
 
         <ul className="lista">
           {/* Se a lista estiver vazia, mostramos uma mensagem */}
@@ -76,8 +80,8 @@ function App() {
                 {tarefa.texto}
               </div>
               <div className="acoes">
-                <button className="btn-edit">Editar</button>
-                <button className="btn-delete">Excluir</button>
+                <button type="button" className="btn-edit">Editar</button>
+                <button type="button" className="btn-delete">Excluir</button>
               </div>
             </li>
           ))}
