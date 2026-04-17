@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 public class Tarefa {
 
     @Id
-    @Generated(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String texto;
     private Boolean concluida;
