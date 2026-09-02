@@ -12,7 +12,7 @@ public class Tarefa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String texto;
-    private Boolean concluida;
+    private Boolean concluido;
 
     public Long getId() {
         return id;
@@ -30,11 +30,11 @@ public class Tarefa {
         this.texto = texto;
     }
 
-    public Boolean getConcluida() {
-        return concluida;
+    public Boolean getConcluido() {
+        return concluido;
     }
 
-    public void setConcluida(Boolean concluida) {
-        this.concluida = concluida;
+    public void setConcluido(Boolean concluido) {
+        this.concluido = concluido;
     }
 }
