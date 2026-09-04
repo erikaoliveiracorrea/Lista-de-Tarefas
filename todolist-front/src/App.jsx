@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import api from "./services/api";
 import "./App.css";
 import Botoes from "./components/Botoes";
@@ -92,6 +92,16 @@ function App() {
     setIdEditando(null);
     setTextoEditando("");
   }
+
+  useEffect(() =>{
+    api.get("/tarefas")
+     .then((response) => {
+       console.log(response.data);
+     })
+     .cath((error) => {
+      console.error(error);
+     });
+  },[]);
 
   return (
     <div className="container">
