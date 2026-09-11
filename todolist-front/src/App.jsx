@@ -10,38 +10,53 @@ function App() {
   const [textoEditando, setTextoEditando] = useState(""); // guarda o texto temporário da edição
   const inputRef = useRef(null); //referência para o input
 
-  function adicionarTarefa() {
+  async function adicionarTarefa() {
     //validação
     if (novoItem.trim() === "") {
       alert("Digite uma tarefa valida");
       return;
     }
 
-    //criar um objeto
-    const novaTarefa = {
-      id: Date.now(),
-      texto: novoItem,
-      concluida: false,
-    };
+    try {
+      
+      const response = await api.post("/tarefas", {
+        texto: novoItem,
+        concluido: false
+      });
+      setTarefas([...tarefas, response.data]); //manter as tarefas que já existe e acrescentar uma nova
+      setNovoItem(""); //Limpa o campo do imput atomaticamente quando clicar em ADICIONAR
 
-    setTarefas([...tarefas, novaTarefa]); //manter as tarefas que já existe e acrescentar uma nova
-
-    setNovoItem(""); //Limpa o campo do imput atomaticamente quando clicar em ADICIONAR
+    } catch (error) {
+      console.error("Erro ao adicionar tarefa.", error);
+      alert("Não foi possível adicionar a tarefa");
+    }
   }
-
+      
   // Função para marcar/desmarcar tarefa
-  function alternarConcluida(id) {
-    const novasTarefas = tarefas.map((tarefa) => {
-      if (tarefa.id === id) {
-        // Se for a tarefa que cliquei, inverto o valor de concluida
-        return { ...tarefa, concluida: !tarefa.concluida };
-      }
-      // Se não for ela, retorno o item sem mexer
-      return tarefa;
-    });
+  async function alternarConcluida(id) {
 
-    setTarefas(novasTarefas);
+    const tarefa = tarefas.find((tarefa) => tarefa.id === id);
+    if(!tarefa) return;
+
+    try {
+      
+      const response = await api.put(`/tarefas/${id}`,{
+        texto: tarefa.texto,
+        concluido: !tarefa.concluido
+      });
+
+      setTarefas(
+        tarefas.map((tarefa) => 
+        tarefa.id === id ? response.data : tarefa
+        )
+      );
+    } catch (error) {
+      
+      console.error("Erro ao alterar tarefa:", error);
+      alert("Não foi possível alterar a terfa.");
+    }
   }
+  
   // Quando clitar em ADICIONAR, pode apertar ENTER no teclado para adicionar a tarefa, sem precisar clicar no botão
   function handleSubmit(e) {
     e.preventDefault();
@@ -59,34 +74,54 @@ function App() {
   }
 
   // CLICOU EM SALVAR -> salva a alteração
-  function salvarEdicao(id) {
+  async function salvarEdicao(id) {
     if (textoEditando.trim() === "") {
       alert("Digite um texto válido para a tarefa");
       return;
     }
-    const novasTarefas = tarefas.map((tarefa) => {
-      if (tarefa.id === id) {
-        return { ...tarefa, texto: textoEditando };
-      }
-      return tarefa;
-    });
-    setTarefas(novasTarefas);
-    //limpar o estado de edição
-    setIdEditando(null);
-    setTextoEditando("");
+
+    try {
+
+      const response = await api.put(`/tarefas/${id}`,{
+        texto: textoEditando,
+      })
+
+      setTarefas(
+        tarefas.map((tarefa)=> 
+          tarefa.id === id ? response.data : tarefa)
+      );
+
+       //limpar o estado de edição
+      setIdEditando(null);
+      setTextoEditando("");
+
+    } catch (error) {
+      console.error('Erro ao atualizar tarefa:', error);
+      alert('Não foi possível atualizar a tarefa');
+    }
+    
+   
   }
 
   //Exclui uma tarefa da lista
-  function excluirTarefa(id) {
-    const confirmar = window.confirm(
-      "Tem certeza que deseja excluir essa tarefa?",
-    );
+  async function excluirTarefa(id) {
+
+    const confirmar = window.confirm("Tem certeza que deseja excluir essa tarefa?",);
     if (!confirmar) return;
 
-    const novasTarefas = tarefas.filter((tarefa) => tarefa.id !== id);
-    setTarefas(novasTarefas);
-  }
+    try {
+      await api.delete(`/tarefas/${id}`);
 
+      setTarefas(tarefas.filter((tarefa) => 
+      tarefa.id !== id));
+
+    } catch (error) {
+
+      console.error('Erro ao execluir tarefa', error);
+      alert('Não foi possível excluir a tarefa');
+    }
+    
+  }
   //Clicou em cancelar, sai do modo edição sem salvar
   function cancelarEdicao() {
     setIdEditando(null);
@@ -96,9 +131,9 @@ function App() {
   useEffect(() =>{
     api.get("/tarefas")
      .then((response) => {
-       console.log(response.data);
+       setTarefas(response.data);
      })
-     .cath((error) => {
+     .catch((error) => {
       console.error(error);
      });
   },[]);
@@ -129,7 +164,7 @@ function App() {
           {tarefas.map((tarefa) => (
             <li
               key={tarefa.id}
-              className={`item ${tarefa.concluida ? "concluido" : ""}`}
+              className={`item ${tarefa.concluido ? "concluido" : ""}`}
             >
               <div className="item-texto">
                 {/*Lógica de marcar a tarefa como concluída ou não concluída*/}
